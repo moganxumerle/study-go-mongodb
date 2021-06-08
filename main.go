@@ -12,7 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-const URI_MONGODB_ATLAS = "mongodb+srv://admin:admin@cluster0.q79nw.mongodb.net/test?retryWrites=true&w=majority"
+const URI_MONGODB_ATLAS = ""
 
 func main() {
 
