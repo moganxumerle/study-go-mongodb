@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 const DATA_BASE_NAME = "quickstart"
@@ -16,6 +17,9 @@ const PODCASTS_COLLECTION = "podcasts"
 const EPISODES_COLLECTION = "episodes"
 
 var URI_MONGODB_ATLAS = os.Getenv("URI_MONGODB_ATLAS")
+
+var podcastsCollection *mongo.Collection
+var episodesCollection *mongo.Collection
 
 func main() {
 
@@ -26,8 +30,20 @@ func main() {
 
 	//Create and connection on new Database and Collections
 	mongoDB.CreateDatabase(DATA_BASE_NAME)
-	podcastsCollection := mongoDB.GetCollection(PODCASTS_COLLECTION)
-	episodesCollection := mongoDB.GetCollection(EPISODES_COLLECTION)
+	podcastsCollection = mongoDB.GetCollection(PODCASTS_COLLECTION)
+	episodesCollection = mongoDB.GetCollection(EPISODES_COLLECTION)
+
+	//insert
+	//insertDocuments(ctx, mongoDB)
+
+	//query
+	//mongoDB.ReadAllOneByOneCollection(ctx, podcastsCollection)
+	//mongoDB.ReadAllCollection(ctx, episodesCollection)
+	//mongoDB.FindEpisodesByDuration(ctx, episodesCollection, 35)
+	mongoDB.FindEpisodesLongerThanDurationSortByDurationDesc(ctx, episodesCollection, 55)
+}
+
+func insertDocuments(ctx context.Context, mongoDB *databases.MongoDB) {
 
 	//Insert into collections
 	podcastResult, err := podcastsCollection.InsertOne(ctx, bson.D{
