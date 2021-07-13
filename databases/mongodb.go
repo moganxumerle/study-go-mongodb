@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -166,4 +167,38 @@ func (m *MongoDB) InsertDocuments(podcastsCollection, episodesCollection *mongo.
 	}
 
 	fmt.Printf("Inserted %v documents into episode collection!\n", len(episodeResult.InsertedIDs))
+}
+
+func (m *MongoDB) UpdatePodCastDocument(podcastsCollection *mongo.Collection, id, author string) bool {
+
+	podcastId, _ := primitive.ObjectIDFromHex(id)
+
+	result, err := podcastsCollection.UpdateOne(
+		m.ctx,
+		bson.M{"_id": podcastId},
+		bson.D{
+			{"$set", bson.D{{"author", author}}},
+		},
+	)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("Updated %v Documents!\n", result.ModifiedCount)
+
+	return result.ModifiedCount > 0
+}
+
+func (m *MongoDB) DeletePodCastDocuments(collection *mongo.Collection, author string) bool {
+
+	result, err := collection.DeleteMany(m.ctx, bson.M{"author": author})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("DeleteMany removed %v document(s)\n", result.DeletedCount)
+
+	return result.DeletedCount > 0
 }

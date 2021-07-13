@@ -31,11 +31,19 @@ func main() {
 	episodesCollection = mongoDB.GetCollection(EPISODES_COLLECTION)
 
 	//insert
-	mongoDB.InsertDocuments(podcastsCollection, episodesCollection)
+	//mongoDB.InsertDocuments(podcastsCollection, episodesCollection)
 
 	//query
 	mongoDB.ReadAllOneByOneCollection(podcastsCollection)
 	//mongoDB.ReadAllCollection(ctx, episodesCollection)
 	//mongoDB.FindEpisodesByDuration(ctx, episodesCollection, 35)
 	//mongoDB.FindEpisodesLongerThanDurationSortByDurationDesc(episodesCollection, 25)
+
+	//update
+	mongoDB.UpdatePodCastDocument(podcastsCollection, "60ed75a5e16d6b8083660a42", "Aline Xumerle")
+	mongoDB.ReadAllOneByOneCollection(podcastsCollection)
+
+	//delete
+	mongoDB.DeletePodCastDocuments(podcastsCollection, "Aline Xumerle")
+	mongoDB.ReadAllOneByOneCollection(podcastsCollection)
 }
